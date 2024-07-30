@@ -1,1 +1,0 @@
-# StaticPageForMessages_Microservice
