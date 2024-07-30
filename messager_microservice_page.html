@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сообщения</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center; 
+            justify-content: center; 
+            height: 100vh; 
+            margin: 0; 
+            background-color: #f0f0f0; 
+        }
+        h2 {
+            margin-bottom: 10px; 
+        }
+        #textInput {
+            width: 300px; 
+            padding: 10px; 
+            margin-bottom: 10px;
+        }
+        button {
+            margin: 5px; 
+            padding: 10px 20px; 
+            cursor: pointer; 
+        }
+        .response {
+            margin-top: 20px; 
+            border: 1px solid #ccc; 
+            padding: 10px; 
+            background-color: #fff; 
+            width: 300px; 
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+        }
+    </style>
+    <script>
+        // Отправка сообщения
+        async function sendData() {
+            const inputField = document.getElementById("textInput");
+            const text = inputField.value.trim(); 
+
+            if (text === "") {
+                alert("Введите текст перед отправкой!"); 
+                return;
+            }
+
+            const jsonData = JSON.stringify({ content: text });
+
+            try {
+                const response = await fetch("http://87.228.12.31:8080/messages", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: jsonData,
+                });
+
+                if (!response.ok) {
+                    throw new Error('Ошибка сети: ' + response.status);
+                }
+
+                const data = await response.json();
+                document.getElementById("serverResponse").textContent = JSON.stringify(data, null, 2); 
+            } catch (error) {
+                document.getElementById("serverResponse").textContent = "Ошибка: " + error.message; 
+            }
+        }
+
+        // Получение статистики
+        async function getStats() {
+            try {
+                const response = await fetch("http://87.228.12.31:8080/statistics");
+                const data = await response.json();
+                document.getElementById("serverResponse").textContent = JSON.stringify(data, null, 2); 
+            } catch (error) {
+                document.getElementById("serverResponse").textContent = "Ошибка: " + error.message; 
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <h2>Введите сообщение</h2>
+    <input type="text" id="textInput" placeholder="Введите текст" required>
+    <button onclick="sendData()">Отправить</button>
+    <button onclick="getStats()">Глобальная статистика по сообщениям</button>
+
+    <div class="response">
+        <h3>Ответ от сервера:</h3>
+        <pre id="serverResponse"></pre>
+    </div>
+
+</body>
+</html>
