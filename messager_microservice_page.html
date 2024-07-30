@@ -51,7 +51,7 @@
             const jsonData = JSON.stringify({ content: text });
 
             try {
-                const response = await fetch("http://87.228.12.31:8080/messages", {
+                const response = await fetch("http://<ЗДЕСЬ ВВЕДИТЕ IP АДРЕС СЕРВЕРА>:8080/messages", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -73,7 +73,7 @@
         // Получение статистики
         async function getStats() {
             try {
-                const response = await fetch("http://87.228.12.31:8080/statistics");
+                const response = await fetch("http://<ЗДЕСЬ ВВЕДИТЕ IP АДРЕС СЕРВЕРА>:8080/statistics");
                 const data = await response.json();
                 document.getElementById("serverResponse").textContent = JSON.stringify(data, null, 2); 
             } catch (error) {
